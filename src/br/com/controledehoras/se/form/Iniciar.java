@@ -5,7 +5,7 @@ import br.com.controledehoras.core.beans.RegistroArquivo;
 import br.com.controledehoras.core.beans.Tempo;
 import br.com.controledehoras.core.saldo.CalculadoraMediaHelper;
 import br.com.controledehoras.core.saldo.Quadrimestre;
-import br.com.controledehoras.core.sintonia.SintoniaHelper;
+import br.com.controledehoras.core.csv.CSVHelper;
 import br.com.controledehoras.core.tempo.CalcTempoUtil;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,21 +24,19 @@ public class Iniciar {
     public static void main(String[] args) throws Exception {
         // Exemplo de como usar a biblioteca
 
-        CalcTempoUtil calc = new CalcTempoUtil();
-
-        SintoniaHelper sintonia = new SintoniaHelper();
-        List<RegistroArquivo> registros = sintonia.obterRegistrosDoArquivo("caminho do arquivo");
+        List<RegistroArquivo> registros = CSVHelper.getInstance().obterRegistrosDoArquivo("caminho do arquivo");
 
         List<Feriado> feriados = new ArrayList<Feriado>();
-        feriados.add(new Feriado(calc.getCalendar(20140709), 1d));
+        feriados.add(new Feriado(2014, 7, 9));
 
-        Calendar consumirAte = calc.getCalendar(20140831);
+        Calendar consumirAte = CalcTempoUtil.getInstance().getCalendar(2014, 8, 31);
 
-        CalculadoraMediaHelper helper = new CalculadoraMediaHelper();
-        Tempo saldoDiario = helper.calcularMediaDiariaParaEliminarSaldo(registros, Quadrimestre.SEGUNDO, feriados, calc.getYYYYMMDD(consumirAte));
+        Tempo saldoDiario = CalculadoraMediaHelper.getInstance()
+                .calcularMediaDiariaParaEliminarSaldo(registros, Quadrimestre.SEGUNDO
+                        , feriados, CalcTempoUtil.getInstance().getYYYYMMDD(consumirAte));
 
         System.out.print("Realizar " + saldoDiario.getHorasString()
-                + " por dia até " + calc.getDateFormatDDMMMYY(consumirAte));
+                + " por dia até " + CalcTempoUtil.getInstance().getDateFormatDDMMMYY(consumirAte));
 
         //TODO: Criar um metodo no CalcTempoUtil que recebe um formato de data e uma data e formata
     }
