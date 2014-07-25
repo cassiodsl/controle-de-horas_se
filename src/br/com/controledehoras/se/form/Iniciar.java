@@ -1,8 +1,8 @@
 package br.com.controledehoras.se.form;
 
-import br.com.controledehoras.core.beans.Feriado;
-import br.com.controledehoras.core.beans.RegistroArquivo;
-import br.com.controledehoras.core.beans.Tempo;
+import br.com.controledehoras.core.beans.Discountable;
+import br.com.controledehoras.core.beans.ITempo;
+import br.com.controledehoras.core.beans.Registrable;
 import br.com.controledehoras.core.saldo.CalculadoraMediaHelper;
 import br.com.controledehoras.core.saldo.Quadrimestre;
 import br.com.controledehoras.core.csv.CSVHelper;
@@ -23,19 +23,20 @@ public class Iniciar {
      */
     public static void main(String[] args) throws Exception {
         // Exemplo de como usar a biblioteca
+        
+        List<Registrable> registros = CSVHelper.getInstance().obterRegistrosDoArquivo("caminho do arquivo");
 
-        List<RegistroArquivo> registros = CSVHelper.getInstance().obterRegistrosDoArquivo("caminho do arquivo");
-
-        List<Feriado> feriados = new ArrayList<Feriado>();
-        feriados.add(new Feriado(2014, 7, 9));
+        List<Discountable> feriados = new ArrayList<Discountable>();
+        feriados.add(new Atestado());
 
         Calendar consumirAte = CalcTempoUtil.getInstance().getCalendar(2014, 8, 31);
 
-        Tempo saldoDiario = CalculadoraMediaHelper.getInstance()
+        ITempo saldoDiario = CalculadoraMediaHelper.getInstance()
                 .calcularMediaDiariaParaEliminarSaldo(registros, Quadrimestre.SEGUNDO
-                        , feriados, CalcTempoUtil.getInstance().getYYYYMMDD(consumirAte));
+                        , feriados, CalcTempoUtil.getInstance().getYYYYMMDD(consumirAte), 8);
 
-        System.out.print("Realizar " + saldoDiario.getHorasString()
+        String horasStr = CalcTempoUtil.getInstance().getHorasString(saldoDiario.getMinutos());
+        System.out.print("Realizar " + horasStr
                 + " por dia até " + CalcTempoUtil.getInstance().getDateFormatDDMMMYY(consumirAte));
 
         //TODO: Criar um metodo no CalcTempoUtil que recebe um formato de data e uma data e formata
