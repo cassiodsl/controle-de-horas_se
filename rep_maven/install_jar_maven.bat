@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=controle-de-horas_core-0.0.1-SNAPSHOT.jar -DgroupId=controle-de-horas_core -DartifactId=controle-de-horas_core -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar
